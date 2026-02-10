@@ -1,7 +1,7 @@
 from geopy.geocoders import Photon
 from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
 import time
-from Data_preprocessing.feature_engineering import encode_distance, encode_single_categorical, new_column_sum
+from Data_preprocessing.feature_engineering import encode_distance, encode_single_categorical, new_column_sum, withdraw_columns
 
 def geocode_address(address, sleep=0.3):
     try:
@@ -17,11 +17,13 @@ def geocode_address(address, sleep=0.3):
 def preprocessin_app(df):
     # Calculating the lattitude and the longitude from the adress
     df[["latitude", "longitude"]] = geocode_address(df["Address"])
+    df = withdraw_columns(df,'Address')
     #Encode distance to downtown
     # Position of the CN Tower
     lat_CN = 43.6426
     lon_CN = -79.3871
     df = encode_distance(df, 'distance to downtown (km)', lat_CN, lon_CN)
+
 
     #Encode distance to Forest Hill
     lat_forest = 43.6936
