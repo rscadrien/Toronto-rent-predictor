@@ -15,7 +15,6 @@ This intelligent tool uses **machine learning** to estimate the monthly rent of 
 2. **Specify amenities**: Indicate whether the property includes parking, furniture, air conditioning, pets, internet, TV, and utilities.
 3. **Click "Predict rent"**: The app will process your input and display the **estimated monthly rent** based on similar properties in Toronto.
 
-> Tip: The more accurate the property details, the more precise the prediction!
 """)
 #User  Inputs
 Address = st.text_input("Property address",
