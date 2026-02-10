@@ -31,7 +31,7 @@ This project has three main components:
 
 2. **Machine Learning Pipeline**
    - Preprocessing: mean imputation, scaling, one-hot encoding
-   - Model: XGBoost Regressor (200 estimators, max depth 7, learning rate 0.05, subsample 0.8)
+   - Model: XGBoost Regressor 
    - Combined into a **single scikit-learn Pipeline**
 
 3. **Inference with Streamlit**
