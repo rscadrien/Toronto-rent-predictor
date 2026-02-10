@@ -5,7 +5,7 @@ from Data_preprocessing.Preprocessing_app import preprocessin_app
 
 # Streamlit app for Toronto Rental Price Prediction
 
-st.title("Toronto Rental Price Prediction")
+st.title("Toronto Rental Price Prediction by ML/AI")
 
 #User  Inputs
 Address = st.text_input("Property address",
@@ -19,19 +19,19 @@ Size = st.number_input("Living area (sq ft)", min_value=0, max_value=10000,
 parking = st.number_input("Number of parking spaces", min_value=0, max_value=3, step=1)
 furnished = st.selectbox("Furnished?", options=['Yes', 'No'])
 AC = st.selectbox("Air conditioning?", options=['Yes', 'No'])
-Smoking = st.selectbox("Is smoking permitted?", options=['Yes','Outdoor only','No'])
-Pet = st.selectbox("Are pet allowed?", options=['Yes','Limited','No'])
-Internet = st.selectbox("Is Wifi included in the rent?",options=['Yes','No'])
-TV = st.selectbox("Is cable TV included in the rent?", options=['Yes', 'No'])
-Balcony = st.selectbox("Balcony", options=['Yes','No'])
-Yard = st.selectbox('Yard or outdoor space',options=['Yes','No'])
-Hydro = st.selectbox('Is the hydro included in the rent?', options=['Yes','No'])
-Heat = st.selectbox('Is the heater included in the rent?', options=['Yes','No'])
-Water = st.selectbox('Is water included in the rent?', options=['Yes','No'])
-Laundry_un = st.selectbox('Is there laundry in the unit?',options=['Yes','No'])
-Laundry_bd = st.selectbox('Is there laundry in the building?', options=['Yes','No'])
-Fridge = st.selectbox('Is there a fridge/freezer in the unit?', options=['Yes','No'])
-Dishwasher = st.selectbox('Is there a dishwasher in the unit?', options=['Yes','No'])
+Smoking = st.selectbox("Smoking permitted?", options=['Yes','Outdoor only','No'])
+Pet = st.selectbox("Pets allowed?", options=['Yes','Limited','No'])
+Internet = st.selectbox("Wifi included in the rent?",options=['Yes','No'])
+TV = st.selectbox("Cable TV included in the rent?", options=['Yes', 'No'])
+Balcony = st.selectbox("Balcony?", options=['Yes','No'])
+Yard = st.selectbox('Yard or outdoor space?',options=['Yes','No'])
+Hydro = st.selectbox('Hydro included in the rent?', options=['Yes','No'])
+Heat = st.selectbox('Heater included in the rent?', options=['Yes','No'])
+Water = st.selectbox('Water included in the rent?', options=['Yes','No'])
+Laundry_un = st.selectbox('Laundry in the unit?',options=['Yes','No'])
+Laundry_bd = st.selectbox('Laundry in the building?', options=['Yes','No'])
+Fridge = st.selectbox('Fridge/freezer in the unit?', options=['Yes','No'])
+Dishwasher = st.selectbox('Dishwasher in the unit?', options=['Yes','No'])
 
 X = pd.DataFrame([{
     'Address': Address,
