@@ -59,6 +59,7 @@ X = pd.DataFrame([{
 if st.button("Predict rent"):
     #Preprocessing steps
     X = preprocessin_app(X)
+    st.dataframe(X)
     # Load model
     model = joblib.load('./Model/toronto_rental_model.pkl')
     price_pred = model.predict(X)
