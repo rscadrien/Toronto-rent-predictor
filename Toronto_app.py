@@ -5,8 +5,18 @@ from Data_preprocessing.Preprocessing_app import preprocessin_app
 
 # Streamlit app for Toronto Rental Price Prediction
 
-st.title("Toronto Rental Price Prediction by ML/AI")
+st.title("🏠 Toronto Rental Price Predictor")
+st.markdown("""
+Welcome to the **Toronto Rental Price Prediction App**!  
+This intelligent tool uses **machine learning** to estimate the monthly rent of a property in Toronto based on its features, location, and amenities. Whether you’re a landlord, tenant, or real estate enthusiast, this app gives you a **quick and data-driven rental estimate**.
 
+### How to use this app:
+1. **Enter the property details**: Provide the full address, type of building, number of bedrooms and bathrooms, living area, and other relevant features.
+2. **Specify amenities**: Indicate whether the property includes parking, furniture, air conditioning, pets, internet, TV, and utilities.
+3. **Click "Predict rent"**: The app will process your input and display the **estimated monthly rent** based on similar properties in Toronto.
+
+> Tip: The more accurate the property details, the more precise the prediction!
+""")
 #User  Inputs
 Address = st.text_input("Property address",
                         placeholder="e.g. 6020 Bathurst St, Toronto, ON",
