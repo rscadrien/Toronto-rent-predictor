@@ -5,6 +5,28 @@ from sklearn.compose import ColumnTransformer
 from xgboost import XGBRegressor
 
 def full_pipeline(df):
+    """
+    Create a complete machine learning pipeline for Toronto rental data.
+
+    This function defines a preprocessing and modeling pipeline that includes:
+    - Mean imputation and scaling of numerical columns
+    - Standard scaling of selected features
+    - One-hot encoding of categorical columns
+    - An XGBoost regression model for predicting rental prices
+
+    The preprocessing and model are combined into a single scikit-learn
+    Pipeline object, suitable for training or inference.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame (used only to infer column names for transformations).
+
+    Returns
+    -------
+    sklearn.pipeline.Pipeline
+        A full scikit-learn Pipeline with preprocessing and XGBoost model.
+    """
     # Define the columns for each type of transformation
     mean_scal_col = ['latitude', 'longitude','distance to downtown (km)', 'distance to Forest Hill (km)',
             'distance to Rosedale (km)', 'distance to Lawrence Park (km)', 'distance to Flemingdon Park (km)',

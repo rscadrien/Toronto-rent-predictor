@@ -3,36 +3,94 @@ import pandas as pd
 
 def withdraw_columns(df, columns_to_remove):
     """
-    Removes specified columns from the DataFrame.
-    
-    df: DataFrame from which columns will be removed
-    columns_to_remove: List of column names to be removed from the DataFrame
+    Remove specified columns from a DataFrame.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame.
+    columns_to_remove : list of str
+        Column names to drop from the DataFrame.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with the specified columns removed.
     """
     df = df.drop(columns=columns_to_remove)
     return df
 
 def selection_rows(df, columns_to_check, min_price, max_price):
     """
-    Removes rows with missing values from the DataFrame.
-    
-    df: DataFrame from which rows with missing values will be removed
+    Filter rows based on missing values and price range.
+
+    Rows with missing values in the specified column are removed, and
+    only rows with prices within the given range are retained.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame.
+    columns_to_check : str
+        Column name used to check for missing values.
+    min_price : float
+        Minimum allowed price.
+    max_price : float
+        Maximum allowed price.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Filtered DataFrame.
     """
     df = df.dropna(subset=[columns_to_check])
     df = df[(df['Price($)'] >= min_price) & (df['Price($)'] <= max_price)]
     return df
 
 def encode_single_categorical(df,column,mapping):
+    """
+    Encode a categorical column using a provided mapping.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame.
+    column : str
+        Name of the categorical column to encode.
+    mapping : dict
+        Dictionary mapping original categories to numerical values.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with the encoded column.
+    """    
     df[column] = df[column].map(mapping)
     return df
 
 def encode_multiple_columns(df, old_column, new_columns, mapping):
     """
-    Encodes a single categorical column into multiple binary columns based on a provided mapping.
-    
-    df: DataFrame containing the data to be encoded
-    old_column: the name of the original categorical column to be encoded
-    new_columns: List of new column names corresponding to the categories in the mapping
-    mapping: Dictionary mapping the original categorical values to their corresponding binary values for each new column
+    Encode a single categorical column into multiple numerical columns.
+
+    The original column is replaced by several new columns defined by
+    the mapping values.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame.
+    old_column : str
+        Name of the categorical column to encode.
+    new_columns : list of str
+        Names of the new columns to be created.
+    mapping : dict
+        Mapping from original values to tuples/lists corresponding
+        to the new columns.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with expanded encoded columns.
     """
     df[new_columns] = df[old_column].map(mapping).apply(pd.Series)
     df = df.drop(columns=[old_column])
@@ -40,10 +98,22 @@ def encode_multiple_columns(df, old_column, new_columns, mapping):
 
 def encode_appliance(df, appliances_list):
     """
-    Encoding the 'Appliances' column into multiple binary columns based on the presence of each appliance in the list.
-    
-    df: DataFrame containing the 'Appliances' column to be encoded
-    appliances_list: List of appliances to be encoded as binary columns
+    Encode appliance availability into binary columns.
+
+    Each appliance is converted into a binary feature indicating
+    whether it is present in the listing.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame containing an 'Appliances' column.
+    appliances_list : list of str
+        List of appliances to encode.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with appliance columns encoded as binary features.
     """
     df['Appliances'] = df['Appliances'].fillna('')
     for app in appliances_list:
@@ -54,12 +124,21 @@ def encode_appliance(df, appliances_list):
 
 def distance(lat1, lon1, lat2, lon2):
     """
-    Calculating the distance between two geographical points using the Haversine formula.
-    
-    lat1: latitude of the first point
-    lon1: lomgitude of the first point
-    lat2: latitude of the second point
-    lon2: longitude of the second point
+    Compute the great-circle distance between two geographic points.
+
+    Uses the Haversine formula to calculate distances on the Earth's surface.
+
+    Parameters
+    ----------
+    lat1, lon1 : float or array-like
+        Latitude and longitude of the first point(s).
+    lat2, lon2 : float
+        Latitude and longitude of the second point.
+
+    Returns
+    -------
+    float or numpy.ndarray
+        Distance in kilometers.
     """
     R = 6371  # Earth radius in kilometers
     lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
@@ -72,12 +151,26 @@ def distance(lat1, lon1, lat2, lon2):
 
 def encode_distance(df, name_column, lat_place, lon_place):
     """
-    Encodes the distance from a given location (lat_place, lon_place) to the coordinates specified in the name_column.
-    
-    df: DataFrame containing the data to be encoded
-    name_column: the name of the column containing the coordinates in the format "lat,lon"
-    lat_place: Latitude of the reference location
-    lon_place: Longitude of the reference location
+    Compute and encode distance to a reference location.
+
+    Calculates the Haversine distance between each listing and a fixed
+    geographic reference point.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame containing 'latitude' and 'longitude' columns.
+    name_column : str
+        Name of the new distance column.
+    lat_place : float
+        Latitude of the reference location.
+    lon_place : float
+        Longitude of the reference location.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with the distance column added.
     """
     df[name_column] = distance(
         df['latitude'].values,
@@ -89,18 +182,49 @@ def encode_distance(df, name_column, lat_place, lon_place):
 
 def new_column_sum(df, new_column, column_1, column_2):
     """
-    Creates a new column in the DataFrame that is the sum of two existing columns.
-    
-    df: DataFrame containing the data to be processed
-    new_column: the name of the new column to be created
-    column_1: the name of the first column to be summed
-    column_2: the name of the second column to be summed
+    Create a new column as the sum of two existing columns.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame.
+    new_column : str
+        Name of the new column to create.
+    column_1 : str
+        First column to sum.
+    column_2 : str
+        Second column to sum.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with the new summed column.
     """
     df[new_column] = df[column_1] + df[column_2]
     return df
 
 
 def encode_size(df, name_column, column_mean):
+    """
+    Clean and impute property size values.
+
+    Converts size values to numeric format and imputes missing values
+    using the mean size grouped by another feature (e.g., number of rooms).
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame.
+    name_column : str
+        Name of the size column (e.g., 'Size (sqft)').
+    column_mean : str
+        Column used to compute group-wise means for imputation.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with cleaned and imputed size values.
+    """
     df[name_column] = df[name_column].replace('Not Available', np.nan)
     df[name_column] = df[name_column].str.replace(',','')
     df[name_column] = df[name_column].astype(float)
@@ -110,6 +234,23 @@ def encode_size(df, name_column, column_mean):
     return df
 
 def feature_engineering_Toronto(df):
+    """
+    Perform full feature engineering pipeline for Toronto rental data.
+
+    This function cleans the dataset, encodes categorical variables,
+    creates derived features, computes geographic distances, and prepares
+    the data for machine learning models.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Raw Toronto rental listings DataFrame.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Fully processed DataFrame ready for modeling.
+    """
     # Remove unnecessary columns and filter rows based on price
     column_delete = ['Unnamed: 0','Address',"Title", 'Date Posted', 'Move-In Date', 'Visit Counter', 'url', 'Description',
                      'Amenities', 'Agreement Type']

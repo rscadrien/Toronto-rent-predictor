@@ -4,6 +4,26 @@ import time
 from Data_preprocessing.feature_engineering import encode_distance, encode_single_categorical, new_column_sum, withdraw_columns
 
 def geocode_address(address, sleep=0.3):
+    """
+    Convert a textual address into geographic coordinates.
+
+    Uses the Photon geocoding service to retrieve latitude and longitude
+    from a given address string. Includes a delay between requests to
+    respect rate limits and handles common geocoding timeouts.
+
+    Parameters
+    ----------
+    address : str
+        Address to geocode.
+    sleep : float, optional
+        Time in seconds to wait after each request (default is 0.3).
+
+    Returns
+    -------
+    tuple of (float or None, float or None)
+        Latitude and longitude of the address. Returns (None, None) if
+        geocoding fails.
+    """
     try:
         geolocator = Photon(user_agent="adrien_geocoder", timeout=10)
         location = geolocator.geocode(address)
@@ -15,6 +35,27 @@ def geocode_address(address, sleep=0.3):
     return None, None
 
 def preprocessin_app(df):
+    """
+    Preprocess a single rental listing for inference in the Streamlit app.
+
+    This function performs lightweight feature engineering suitable for
+    real-time prediction, including:
+    - Geocoding the address
+    - Computing distances to key Toronto neighborhoods
+    - Encoding binary and categorical features
+    - Creating derived numerical features
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame containing a single rental listing.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Preprocessed DataFrame ready for model inference.
+    """
+    # Preprocessing steps for the inference in the streamlit app
     # Calculating the lattitude and the longitude from the adress
     df[["latitude", "longitude"]] = geocode_address(df["Address"])
     df = withdraw_columns(df,'Address')
